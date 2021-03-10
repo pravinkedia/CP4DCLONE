@@ -122,9 +122,11 @@ bash-3.2$ cat preloadimages.sh
 
 1.	If the new cluster has only OCP installed, then the reinstate command with load the images from either internal or external registry.
 2.	Then we will issue the re-instate command in the new cluster by provide the new cluster details
+
     docker run -e ACTION=REINSTATE -e INTERNALREGISTRY=1 -e SERVER=<OC LOGIN SERVER> -e TOKEN=<OC LOGIN TOKEN> -e SINCRIMAGE=quay.io/drangar_us/sincr:v2 -e PROJECT=<OC PROJECT NAME> -e COSBUCKET=<S3 BUCKET NAME> -e COSAPIKEY=<S3 ACCESS KEY> -e COSSECRETKEY=<S3 SECRET KEY> -e COSREGION=<S3 REGION> -e COSENDPOINT=<S3 END POINT> -it quay.io/drangar_us/cpc:cp4d.3.5
     E.G. Command
     docker run -e ACTION=REINSTATE -e INTERNALREGISTRY=1 -e SERVER=https://c100-e.us-east.containers.cloud.ibm.com:32279 -e TOKEN=CS44Pxl_iYg2yWjMKLWBRH9D_kKiDcH8atnt7w0kdJg -e SINCRIMAGE=quay.io/drangar_us/sincr:v2 -e PROJECT=cpd30 -e COSBUCKET=aipclonebackuppravin -e COSAPIKEY=b737054a3ed54cf0812ddbd56c5efe8d -e COSSECRETKEY=55a9a6c6d7fc9e70c4038c54818b88b3f3fed52874cd47e9 -e COSREGION=au-syd -e COSENDPOINT=https://s3.au-syd.cloud-object-storage.appdomain.cloud -it quay.io/drangar_us/cpc:cp4d.3.5
+  
 3.	Validate target cluster health.
     oc exec -i dv-engine-0 -n <NAMESPCE> -c dv-engine -- bash -c "/opt/dv/current/liveness.sh --verbose"
 5.	Validate queries against DV tables and caches from source clusters work without issues.
