@@ -4,7 +4,7 @@ Cloning from the Source OCP/CP4D cluster and Reinstate to new OCP cluster has th
 ## Pre-requisites for Cloning
 Pre-requisites before running cloner utility.
 
-1.	S3 /ICOS where AIP user can create a bucket and save the clones to
+1.	Details of the S3 / ICOS where AIP user can create a bucket and save the clones to
 2.	OCP 4.5.6 or higher cluster with OCP/CP4D/DV/DMC services installed.
 3.	Run the oc login for the existing OCP/CP4D cluster.
 4.	From the oc login you will get the SERVER and TOKEN parameters we need.
@@ -81,42 +81,42 @@ registry:
 
 bash-3.2$ cat preloadimages.sh
 ---
-!#/bin/ksh
--
-LITEREPO="/Users/pravinkedia/Downloads/AIP/clone/cpd35/repo.yaml"
-DVREPO="/Users/pravinkedia/Downloads/AIP/clone/cpd35/repo.yaml"
-DMCREPO="/Users/pravinkedia/Downloads/AIP/clone/cpd35/repo.yaml"
-CPDCLI="/Users/pravinkedia/Downloads/AIP/clone/cpd35/cpd-cli"
-NAMESPACE="cpd30"
-REGISTRY=$(oc get route -n openshift-image-registry | grep image-registry | awk '{print $2}')
-IMAGEDIR="/Users/pravinkedia/Downloads/AIP/clone/cpd35/cpd-cli-workspace"
+  !#/bin/ksh
+    -
+    LITEREPO="/Users/pravinkedia/Downloads/AIP/clone/cpd35/repo.yaml"
+    DVREPO="/Users/pravinkedia/Downloads/AIP/clone/cpd35/repo.yaml"
+    DMCREPO="/Users/pravinkedia/Downloads/AIP/clone/cpd35/repo.yaml"
+    CPDCLI="/Users/pravinkedia/Downloads/AIP/clone/cpd35/cpd-cli"
+    NAMESPACE="cpd30"
+    REGISTRY=$(oc get route -n openshift-image-registry | grep image-registry | awk '{print $2}')
+    IMAGEDIR="/Users/pravinkedia/Downloads/AIP/clone/cpd35/cpd-cli-workspace"
 
-cd /Users/pravinkedia/Downloads/AIP/clone/cpd35/
-echo "Starting to Download the file (may take long time) Step 0"
+    cd /Users/pravinkedia/Downloads/AIP/clone/cpd35/
+    echo "Starting to Download the file (may take long time) Step 0"
 
-echo "Staring to Download CPD-LITE - Step 1"
-read a
-${CPDCLI} preload-images --action download -a lite --repo ${LITEREPO} --accept-all-licenses
-echo "Starting to preload CPD-LITE - Step 2"
-read a
-${CPDCLI} preload-images --assembly lite --action push --load-from ${IMAGEDIR} --transfer-image-to ${REGISTRY}/${NAMESPACE} --target-registry-username $(oc whoami)  --target-registry-password $(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify
+    echo "Staring to Download CPD-LITE - Step 1"
+    read a
+    ${CPDCLI} preload-images --action download -a lite --repo ${LITEREPO} --accept-all-licenses
+    echo "Starting to preload CPD-LITE - Step 2"
+    read a
+    ${CPDCLI} preload-images --assembly lite --action push --load-from ${IMAGEDIR} --transfer-image-to ${REGISTRY}/${NAMESPACE} --target-registry-username $(oc whoami)  --target-registry-password $(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify
 
-echo "Staring to Download DV - Step 3"
-read a
-${CPDCLI} preload-images --action download -a dv --repo ${DVREPO} --accept-all-licenses
+    echo "Staring to Download DV - Step 3"
+    read a
+    ${CPDCLI} preload-images --action download -a dv --repo ${DVREPO} --accept-all-licenses
 
-echo "Starting to preload DV - Step 4"
-read a
-${CPDCLI} preload-images --assembly dv --action push --load-from ${IMAGEDIR} --transfer-image-to ${REGISTRY}/${NAMESPACE} --target-registry-username $(oc whoami) --target-registry-password $(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify
-echo "Staring to Download DMC - Step 5"
-read a
-${CPDCLI} preload-images --action download -a dmc --repo ${DVREPO} --accept-all-licenses
+    echo "Starting to preload DV - Step 4"
+    read a
+    ${CPDCLI} preload-images --assembly dv --action push --load-from ${IMAGEDIR} --transfer-image-to ${REGISTRY}/${NAMESPACE} --target-registry-username $(oc whoami) --target-registry-password $(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify
+    echo "Staring to Download DMC - Step 5"
+    read a
+    ${CPDCLI} preload-images --action download -a dmc --repo ${DVREPO} --accept-all-licenses
 
-echo "Starting to preload DMC- Step 6"
-read a
-${CPDCLI} preload-images --assembly dmc --action push --load-from ${IMAGEDIR} --transfer-image-to ${REGISTRY}/${NAMESPACE} --target-registry-username $(oc whoami) --target-registry-password $(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify
+    echo "Starting to preload DMC- Step 6"
+    read a
+    ${CPDCLI} preload-images --assembly dmc --action push --load-from ${IMAGEDIR} --transfer-image-to ${REGISTRY}/${NAMESPACE} --target-registry-username $(oc whoami) --target-registry-password $(oc whoami -t) --accept-all-licenses --insecure-skip-tls-verify
 
-echo "Complete. All done"
+    echo "Complete. All done"
 
 ## Reinstate for new OpenShift cluster with OCP (preferred)
 
@@ -126,7 +126,7 @@ docker run -e ACTION=REINSTATE -e INTERNALREGISTRY=1 -e SERVER=<OC LOGIN SERVER>
 
 E.G. Command
 docker run -e ACTION=REINSTATE -e INTERNALREGISTRY=1 -e SERVER=https://c100-e.us-east.containers.cloud.ibm.com:32279 -e TOKEN=CS44Pxl_iYg2yWjMKLWBRH9D_kKiDcH8atnt7w0kdJg -e SINCRIMAGE=quay.io/drangar_us/sincr:v2 -e PROJECT=cpd30 -e COSBUCKET=aipclonebackuppravin -e COSAPIKEY=b737054a3ed54cf0812ddbd56c5efe8d -e COSSECRETKEY=55a9a6c6d7fc9e70c4038c54818b88b3f3fed52874cd47e9 -e COSREGION=au-syd -e COSENDPOINT=https://s3.au-syd.cloud-object-storage.appdomain.cloud -it quay.io/drangar_us/cpc:cp4d.3.5
-3.	Validate target cluster health.
+3.  Validate target cluster health.
 oc exec -i dv-engine-0 -n <NAMESPCE> -c dv-engine -- bash -c "/opt/dv/current/liveness.sh --verbose"
 4.	Validate queries against DV tables and caches from source clusters work without issues.
 5.	There are 2 routes returned from:  oc get routes -n zzz
