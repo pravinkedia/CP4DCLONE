@@ -78,9 +78,11 @@ registry:
     apikey: eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJJQk0gTWFya2V0cGxhY2UiLCJpYXQiOjE2MTM1NjQxMTUsImp0aSI6ImFhYmI4NDNhYmE3NDQ4NGZhNzhiYzRlODJjOWRmMjQzIn0.2KVoSRLrAY522wXJiH0fKIVXohV-ZxECXDHhry9IuIo
 
 6.	Preload the images using the below example script that can be enhanced further.
----
-bash-3.2$ cat preloadimages.sh
 
+bash-3.2$ cat preloadimages.sh
+---
+!#/bin/ksh
+-
 LITEREPO="/Users/pravinkedia/Downloads/AIP/clone/cpd35/repo.yaml"
 DVREPO="/Users/pravinkedia/Downloads/AIP/clone/cpd35/repo.yaml"
 DMCREPO="/Users/pravinkedia/Downloads/AIP/clone/cpd35/repo.yaml"
